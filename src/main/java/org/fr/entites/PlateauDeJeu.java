@@ -3,7 +3,10 @@ package org.fr.entites;
 import javax.swing.*;
 import java.awt.*;
 import java.beans.Transient;
+import java.io.IOException;
 import java.util.Arrays;
+
+import static org.fr.modeles.LectureModele.chargerModele;
 
 public class PlateauDeJeu extends JPanel implements Runnable {
 
@@ -13,22 +16,10 @@ public class PlateauDeJeu extends JPanel implements Runnable {
     private final JLabel generationLabel;
     private int vitesseActualisation;
 
-    public PlateauDeJeu(int lignesTotales, int colonnesTotales) {
+    public PlateauDeJeu() throws IOException {
 
-        this.grille = new boolean[lignesTotales][colonnesTotales];
-        this.automate = new Automate(lignesTotales, colonnesTotales);
-        initialiserGrille();
-        generation = 0;
-        generationLabel = new JLabel("Génération : " + generation);
-        add(generationLabel);
-        vitesseActualisation = 100;
-
-    }
-
-    public PlateauDeJeu(Automate automate) {
-
+        this.automate = chargerModele();
         this.grille = new boolean[automate.getLignesTotales()][automate.getColonnesTotales()];
-        this.automate = automate;
         initialiserGrille();
         generation = 0;
         generationLabel = new JLabel("Génération : " + generation);
@@ -80,11 +71,7 @@ public class PlateauDeJeu extends JPanel implements Runnable {
     public void rearrangerGrille(int lignesTotales, int colonnesTotales) {
 
         this.grille = new boolean[lignesTotales][colonnesTotales];
-        this.automate = new Automate(lignesTotales, colonnesTotales);
-        initialiserGrille();
-        generation = 0;
-        repaint();
-        generationLabel.setText("Génération : " + generation);
+        autoRemplissageGrille();
 
     }
 

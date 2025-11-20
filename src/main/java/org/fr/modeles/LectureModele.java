@@ -35,7 +35,7 @@ public abstract class LectureModele {
 
     */
 
-    public static Automate chargerPattern() throws IOException {
+    public static Automate chargerModele() throws IOException {
 
         Path chemin = Paths.get("src/main/resources/modeles/pattern.rle");
         List<String> modele = Files.readAllLines(chemin, StandardCharsets.UTF_8);
@@ -121,12 +121,6 @@ public abstract class LectureModele {
             }
         }
         return lignesModeleDecode;
-
-    }
-    
-    private static int getLignesTotales(List<String> modele) {
-
-        return Integer.parseInt(modele.getFirst().substring((modele.getFirst().indexOf("y = ") + 4),modele.getFirst().indexOf(",", (modele.getFirst().indexOf(",") + 1))));
 
     }
 

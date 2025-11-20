@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import static org.fr.modeles.LectureModele.*;
-
 public class JeuDeLaVie extends JFrame implements ActionListener {
 
     // Menu du Jeu
@@ -65,7 +63,7 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
         menuJeuStop.setEnabled(false);
 
         // Initialisation du plateau de jeu
-        plateauDeJeu = new PlateauDeJeu(chargerPattern());
+        plateauDeJeu = new PlateauDeJeu();
         add(plateauDeJeu);
         pack();
         jeu = new Thread(plateauDeJeu);
@@ -134,6 +132,8 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
             fenetreNouvelleGrille.setVisible(true);
 
         } else if (evenement.getSource().equals(menuFichierOptions)){
+
+            // Permettre le changement de la vitesse d'actualisation
             if (jeu.isAlive()) {
                 mettreLeJeuEnMarche(false);
             }
@@ -166,6 +166,9 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
                 @Override
                 public void stateChanged(ChangeEvent e) {
 
+                    if(sliderVitesse.getValue() < 10){
+                        sliderVitesse.setValue(10);
+                    }
                     sliderLabel.setText("Vitesse : " + sliderVitesse.getValue() + " ms");
 
                 }
@@ -177,10 +180,8 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent evenement) {
 
-                    if (sliderVitesse.getValue() < 10) {
-                        sliderVitesse.setValue(10);
-                    }
                     plateauDeJeu.setVitesseActualisation(sliderVitesse.getValue());
+                    mettreLeJeuEnMarche(true);
                     fenetreVitesse.dispose();
 
                 }
