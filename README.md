@@ -7,3 +7,4 @@ Faire le jeu le plus complet avec le plus de fonctionnalités possible
 # Réalisation
 - Génération d'une grille aléatoire
 - Importation possible de tableaux prédéfinis au format .rle
+- Affichage via Swing

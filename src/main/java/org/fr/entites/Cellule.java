@@ -5,23 +5,23 @@ public class Cellule {
     private boolean enVie;
     private boolean prochainEtat;
 
-    public Cellule() {
+    protected Cellule() {
 
         aleatoireEnVie();
 
     }
 
-    public Cellule(boolean enVie) {
+    protected Cellule(boolean enVie) {
 
         this.enVie = enVie;
 
     }
 
-    public boolean getEnVie() { return enVie; }
-    public boolean getProchainEtat() { return prochainEtat; }
+    protected boolean getEnVie() { return enVie; }
+    protected boolean getProchainEtat() { return prochainEtat; }
 
-    public void setEnVie(boolean enVie) { this.enVie = enVie; }
-    public void setProchainEtat(boolean prochainEtat) { this.prochainEtat = prochainEtat; }
+    protected void setEnVie(boolean enVie) { this.enVie = enVie; }
+    protected void setProchainEtat(boolean prochainEtat) { this.prochainEtat = prochainEtat; }
 
     private void aleatoireEnVie() { enVie = (int) (Math.random() * 2) == 1; }
 
