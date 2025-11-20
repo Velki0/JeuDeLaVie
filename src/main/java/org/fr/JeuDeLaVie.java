@@ -239,7 +239,7 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
             // À propos du projet
             JOptionPane.showMessageDialog(null,
                     """
-                            Ce jeu est inspiré du célèbre jeu "Game of Life" de Jonh Conway.                        \s
+                            Ce jeu est inspiré du célèbre jeu "Game of Life" de John Conway.                        \s
                             Ce projet est une création personnelle dans le but de découvrir l'environnement Java.   \s
                             N'hésitez pas à me retrouver sur GitHub à l'adresse suivante : https://github.com/Velki0"""
             );
