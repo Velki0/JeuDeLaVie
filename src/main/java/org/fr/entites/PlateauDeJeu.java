@@ -10,9 +10,9 @@ import static org.fr.modeles.LectureModele.chargerModele;
 
 public class PlateauDeJeu extends JPanel implements Runnable {
 
+    private Automate automate;
     private boolean[][] grille;
     private int generation;
-    private Automate automate;
     private final JLabel generationLabel;
     private int vitesseActualisation;
 
