@@ -6,7 +6,7 @@ import java.beans.Transient;
 import java.io.IOException;
 import java.util.Arrays;
 
-import static org.fr.modeles.LectureModele.chargerModele;
+import static org.fr.modeles.LectureModele.*;
 
 public class PlateauDeJeu extends JPanel implements Runnable {
 
@@ -24,7 +24,7 @@ public class PlateauDeJeu extends JPanel implements Runnable {
         generation = 0;
         generationLabel = new JLabel("Génération : " + generation);
         add(generationLabel);
-        vitesseActualisation = 100;
+        vitesseActualisation = 50;
 
     }
 

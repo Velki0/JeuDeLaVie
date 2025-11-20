@@ -37,7 +37,7 @@ public abstract class LectureModele {
 
     public static Automate chargerModele() throws IOException {
 
-        Path chemin = Paths.get("src/main/resources/modeles/pattern.rle");
+        Path chemin = Paths.get("src/main/resources/modeles/crystallizationanddecayoscillator.rle");
         List<String> modele = Files.readAllLines(chemin, StandardCharsets.UTF_8);
         modele.removeIf(ligne -> ligne.charAt(0) == '#');
         List<List<Boolean>> modeleNormalise = normaliserModele(modele);
@@ -48,8 +48,7 @@ public abstract class LectureModele {
     private static List<List<Boolean>> normaliserModele(List<String> modele) {
 
         List<List<Boolean>> modeleNormalise = new ArrayList<>();
-        int colonnesTotales = getColonnesTotales(modele);
-        List<String> lignesNormalise = normaliserLignes(modele, colonnesTotales);
+        List<String> lignesNormalise = normaliserLignes(modele);
         List<Boolean> ligneCaractere;
         for (String ligne : lignesNormalise) {
             ligneCaractere = new ArrayList<>();
@@ -66,7 +65,7 @@ public abstract class LectureModele {
 
     }
 
-    private static List<String> normaliserLignes(List<String> modele, int colonnesTotales) {
+    private static List<String> normaliserLignes(List<String> modele) {
 
         StringBuilder modeleSurUneSeuleLigne = new StringBuilder();
         for (int index = 1; index < modele.size(); index++) {
@@ -105,7 +104,7 @@ public abstract class LectureModele {
                 } else if (caractere == '$' | caractere == '!') {
                     lignesModeleDecode.add(chaineDecode.toString());
                     while (compteur > 1) {
-                        lignesModeleDecode.add(String.join("", Collections.nCopies(colonnesTotales, "b")));
+                        lignesModeleDecode.add(String.join("", Collections.nCopies(getColonnesTotales(modele), "b")));
                         compteur--;
                     }
                 } else {
@@ -116,11 +115,20 @@ public abstract class LectureModele {
         }
         // Complète par des cases mortes les lignes non complètes
         for (int index = 0; index < lignesModeleDecode.size(); index++) {
-            if (lignesModeleDecode.get(index).length() < colonnesTotales) {
-                lignesModeleDecode.set(index, (lignesModeleDecode.get(index) + String.join("", Collections.nCopies((colonnesTotales - lignesModeleDecode.get(index).length()), "b"))));
+            if (lignesModeleDecode.get(index).length() < getColonnesTotales(modele)) {
+                lignesModeleDecode.set(index, (lignesModeleDecode.get(index) + String.join("", Collections.nCopies((getColonnesTotales(modele) - lignesModeleDecode.get(index).length()), "b"))));
             }
         }
+        for (int index = lignesModeleDecode.toArray().length; index < getLignesTotales(modele); index++) {
+            lignesModeleDecode.add(String.join("", Collections.nCopies(getColonnesTotales(modele), "b")));
+        }
         return lignesModeleDecode;
+
+    }
+
+    private static int getLignesTotales(List<String> pattern) {
+
+        return Integer.parseInt(pattern.getFirst().substring((pattern.getFirst().indexOf("y = ") + 4),pattern.getFirst().indexOf(",", (pattern.getFirst().indexOf(",") + 1))));
 
     }
 

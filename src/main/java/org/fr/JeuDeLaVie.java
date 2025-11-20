@@ -13,7 +13,7 @@ import java.net.URISyntaxException;
 
 public class JeuDeLaVie extends JFrame implements ActionListener {
 
-    // Menu du Jeu
+    // Menu du jeu
     private final JMenuBar barreDeMenu;
     private final JMenu menuFichier, menuJeu, menuAide;
     private final JMenuItem menuFichierNouvelleGrille, menuFichierOptions, menuFichierQuitter;
@@ -108,7 +108,7 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
             final JSpinner spinnerNouvelleGrilleHauteur = new JSpinner(new SpinnerNumberModel(20, 20, 120, 1));
             spinnerNouvelleGrilleHauteur.setSize(new Dimension(30, 20));
             final JSpinner spinnerNouvelleGrilleLargeur = new JSpinner(new SpinnerNumberModel(20, 20, 150, 1));
-            final JButton creerNouvelleGrille = new JButton("Creer la nouvelle Grille");
+            final JButton creerNouvelleGrille = new JButton("Créer la nouvelle Grille");
             panneauNouvelleGrille.add(new JLabel("Option de la nouvelle Grille", SwingConstants.CENTER));
             panneauNouvelleGrille.add(new JLabel("Nombre le lignes (120max) : ", SwingConstants.CENTER));
             panneauNouvelleGrille.add(spinnerNouvelleGrilleHauteur);
