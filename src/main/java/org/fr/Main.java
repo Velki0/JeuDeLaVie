@@ -1,5 +1,7 @@
 package org.fr;
 
+import org.fr.entites.JeuDeLaVie;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;

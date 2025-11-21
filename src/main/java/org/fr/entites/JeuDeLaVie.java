@@ -1,6 +1,4 @@
-package org.fr;
-
-import org.fr.entites.PlateauDeJeu;
+package org.fr.entites;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;

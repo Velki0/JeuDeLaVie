@@ -4,9 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.Transient;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
-
-import static org.fr.modeles.LectureModele.*;
 
 public class PlateauDeJeu extends JPanel implements Runnable {
 
@@ -18,7 +18,8 @@ public class PlateauDeJeu extends JPanel implements Runnable {
 
     public PlateauDeJeu() throws IOException {
 
-        this.automate = chargerModele();
+        Path chemin = Paths.get("src/main/resources/modeles/crystallizationanddecayoscillator.rle");
+        this.automate = new Automate(new Modele(chemin).getModeleNormaliser());
         this.grille = new boolean[automate.getLignesTotales()][automate.getColonnesTotales()];
         initialiserGrille();
         generation = 0;
