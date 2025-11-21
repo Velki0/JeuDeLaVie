@@ -11,10 +11,6 @@ public class Main {
 
         JFrame jeuDeLaVie = new JeuDeLaVie();
         jeuDeLaVie.setTitle("Jeu de la Vie de Conway");
-        jeuDeLaVie.setLocation(
-                Toolkit.getDefaultToolkit().getScreenSize().width / 2,
-                Toolkit.getDefaultToolkit().getScreenSize().height / 2
-        );
         jeuDeLaVie.setLocationByPlatform(true);
         jeuDeLaVie.setResizable(false);
         jeuDeLaVie.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

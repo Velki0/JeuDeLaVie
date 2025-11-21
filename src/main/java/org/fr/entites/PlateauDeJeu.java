@@ -11,17 +11,16 @@ public class PlateauDeJeu extends JPanel implements Runnable {
     private Automate automate;
     private boolean[][] grille;
     private int generation;
-    private final JLabel generationLabel;
+    private int taillePixels;
     private int vitesseActualisation;
 
     protected PlateauDeJeu() {
 
-        this.automate = new Automate(50, 50, false);
-        this.grille = new boolean[50][50];
+        this.automate = new Automate(100, 100, false);
+        this.grille = new boolean[100][100];
         generation = 0;
-        generationLabel = new JLabel();
+        taillePixels = 5;
         initialiserGrille();
-        add(generationLabel);
         vitesseActualisation = 50;
 
     }
@@ -33,7 +32,7 @@ public class PlateauDeJeu extends JPanel implements Runnable {
                 grille[x][y] = automate.getCellules().get(x).get(y).getEnVie() ;
             }
         }
-        generationLabel.setText("Génération : " + generation);
+        JeuDeLaVie.setGenerationLabel("Génération : " + generation);
         repaint();
 
     }
@@ -51,7 +50,7 @@ public class PlateauDeJeu extends JPanel implements Runnable {
         automate.mettreAJourEtatAutomate();
         initialiserGrille();
         generation++;
-        generationLabel.setText("Génération : " + generation);
+        JeuDeLaVie.setGenerationLabel("Génération : " + generation);
 
     }
 
@@ -82,14 +81,24 @@ public class PlateauDeJeu extends JPanel implements Runnable {
 
     }
 
+    protected int getTaillePixels() { return taillePixels; }
+
     protected int getVitesseActualisation() { return vitesseActualisation; }
+
+    protected void setTaillePixels(int taillePixels) {
+
+        this.taillePixels = taillePixels;
+        repaint();
+
+    }
+
     protected void setVitesseActualisation(int vitesseActualisation) { this.vitesseActualisation = vitesseActualisation; }
 
     @Override
     @Transient
     public Dimension getPreferredSize() {
 
-        return new Dimension(grille[0].length * 8, grille.length * 8);
+        return new Dimension(grille[0].length * taillePixels, grille.length * taillePixels);
 
     }
 
@@ -101,7 +110,7 @@ public class PlateauDeJeu extends JPanel implements Runnable {
             for (int y = 0; y < grille[0].length; y++) {
                 if (grille[x][y]) {
                     graph.setColor(Color.red);
-                    graph.fillRect(y * 8, x * 8, 8, 8);
+                    graph.fillRect(y * taillePixels, x * taillePixels, taillePixels, taillePixels);
                 }
             }
         }

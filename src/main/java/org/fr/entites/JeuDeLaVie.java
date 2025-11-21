@@ -9,7 +9,6 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class JeuDeLaVie extends JFrame implements ActionListener {
@@ -19,7 +18,9 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
     private final JMenu menuFichier, menuJeu, menuAide;
     private final JMenuItem menuFichierNouvelleGrille, menuFichierOuvrir, menuFichierOptions, menuFichierQuitter;
     private final JMenuItem menuJeuAutoRemplissage, menuJeuStart, menuJeuStop, menuJeuReset;
-    private final JMenuItem  menuAideSource, menuAideAPropos;
+    private final JMenuItem menuAideSource, menuAideAPropos;
+    private final JPanel affichageGeneration = new JPanel();
+    private static final JLabel generationLabel = new JLabel("Génération : ");
     private final PlateauDeJeu plateauDeJeu;
     private Thread jeu;
 
@@ -67,8 +68,11 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
         menuJeuStop.setEnabled(false);
 
         // Initialisation du plateau de jeu
+        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+        affichageGeneration.add(generationLabel);
+        add(affichageGeneration, BorderLayout.NORTH);
         plateauDeJeu = new PlateauDeJeu();
-        add(plateauDeJeu);
+        add(plateauDeJeu, BorderLayout.SOUTH);
         pack();
         jeu = new Thread(plateauDeJeu);
 
@@ -81,12 +85,16 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
             menuJeuStop.setEnabled(true);
             jeu = new Thread(plateauDeJeu);
             jeu.start();
-        } else  {
+        } else {
             menuJeuStart.setEnabled(true);
             menuJeuStop.setEnabled(false);
             jeu.interrupt();
         }
 
+    }
+
+    protected static void setGenerationLabel(String generation) {
+        generationLabel.setText(generation);
     }
 
     @Override
@@ -102,18 +110,56 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
             fenetreNouvelleGrille.setTitle("Nouvelle Grille");
             fenetreNouvelleGrille.setResizable(false);
             JPanel panneauNouvelleGrille = new JPanel();
-            fenetreNouvelleGrille.add(panneauNouvelleGrille);
             panneauNouvelleGrille.setLayout(new BoxLayout(panneauNouvelleGrille, BoxLayout.Y_AXIS));
-            final JSpinner spinnerNouvelleGrilleHauteur = new JSpinner(new SpinnerNumberModel(20, 20, 120, 1));
-            final JSpinner spinnerNouvelleGrilleLargeur = new JSpinner(new SpinnerNumberModel(20, 20, 120, 1));
+            fenetreNouvelleGrille.add(panneauNouvelleGrille);
+            final JLabel labelOptions = new JLabel("Option de la nouvelle Grille");
+            labelOptions.setAlignmentX(Component.CENTER_ALIGNMENT);
+            final JLabel labelLignes = new JLabel("Nombre le lignes (" + (800 / plateauDeJeu.getTaillePixels()) + " max) : ");
+            labelLignes.setAlignmentX(Component.CENTER_ALIGNMENT);
+            final JLabel labelColonnes = new JLabel("Nombre de colonnes (" + (800 / plateauDeJeu.getTaillePixels()) + " max) : ");
+            labelColonnes.setAlignmentX(Component.CENTER_ALIGNMENT);
+            final JSpinner spinnerNouvelleGrilleHauteur = new JSpinner(new SpinnerNumberModel(100, 20, 800, 1));
+            spinnerNouvelleGrilleHauteur.setAlignmentX(Component.CENTER_ALIGNMENT);
+            final JSpinner spinnerNouvelleGrilleLargeur = new JSpinner(new SpinnerNumberModel(100, 20, 800, 1));
+            spinnerNouvelleGrilleLargeur.setAlignmentX(Component.CENTER_ALIGNMENT);
             final JButton creerNouvelleGrille = new JButton("Créer la nouvelle Grille");
-            panneauNouvelleGrille.add(new JLabel("Option de la nouvelle Grille", SwingConstants.CENTER));
-            panneauNouvelleGrille.add(new JLabel("Nombre le lignes (120max) : ", SwingConstants.CENTER));
+            creerNouvelleGrille.setAlignmentX(Component.CENTER_ALIGNMENT);
+            panneauNouvelleGrille.add(labelOptions);
+            panneauNouvelleGrille.add(Box.createRigidArea(new Dimension(0, 10)));
+            panneauNouvelleGrille.add(labelLignes);
             panneauNouvelleGrille.add(spinnerNouvelleGrilleHauteur);
-            panneauNouvelleGrille.add(new JLabel("Nombre le colonnes (120max) : ", SwingConstants.CENTER));
+            panneauNouvelleGrille.add(Box.createRigidArea(new Dimension(0, 10)));
+            panneauNouvelleGrille.add(labelColonnes);
             panneauNouvelleGrille.add(spinnerNouvelleGrilleLargeur);
+            panneauNouvelleGrille.add(Box.createRigidArea(new Dimension(0, 10)));
             panneauNouvelleGrille.add(creerNouvelleGrille);
             panneauNouvelleGrille.setBorder(BorderFactory.createLineBorder(panneauNouvelleGrille.getBackground(), 10));
+
+            spinnerNouvelleGrilleHauteur.addChangeListener(new ChangeListener() {
+
+                @Override
+                public void stateChanged(ChangeEvent e) {
+
+                    if ((int) spinnerNouvelleGrilleHauteur.getValue() * plateauDeJeu.getTaillePixels() > 800) {
+                        spinnerNouvelleGrilleHauteur.setValue(800 / plateauDeJeu.getTaillePixels());
+                    }
+
+                }
+
+            });
+
+            spinnerNouvelleGrilleLargeur.addChangeListener(new ChangeListener() {
+
+                @Override
+                public void stateChanged(ChangeEvent e) {
+
+                    if ((int) spinnerNouvelleGrilleLargeur.getValue() * plateauDeJeu.getTaillePixels() > 800) {
+                        spinnerNouvelleGrilleLargeur.setValue(800 / plateauDeJeu.getTaillePixels());
+                    }
+
+                }
+
+            });
 
             creerNouvelleGrille.addActionListener(new ActionListener() {
 
@@ -121,6 +167,7 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
                 public void actionPerformed(ActionEvent evenement) {
 
                     plateauDeJeu.rearrangerGrille((int) spinnerNouvelleGrilleHauteur.getValue(), (int) spinnerNouvelleGrilleLargeur.getValue());
+                    setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
                     pack();
                     fenetreNouvelleGrille.dispose();
 
@@ -143,71 +190,106 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
             chooser.setDialogTitle("Choisissez un modèle : ");
             chooser.setFileFilter(filtre);
             int valeurRetourne = chooser.showOpenDialog(null);
-            if(valeurRetourne == JFileChooser.APPROVE_OPTION) {
-                Path chemin = Paths.get(chooser.getSelectedFile().getPath());
+            if (valeurRetourne == JFileChooser.APPROVE_OPTION) {
                 try {
-                    plateauDeJeu.chargerModele(chemin);
+                    plateauDeJeu.chargerModele(Paths.get(chooser.getSelectedFile().getPath()));
+                    setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
                     pack();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             }
 
-        } else if (evenement.getSource().equals(menuFichierOptions)){
+        } else if (evenement.getSource().equals(menuFichierOptions)) {
 
-            // Permettre le changement de la vitesse d'actualisation
+            // Permettre le changement de la taille des pixels et la vitesse d'actualisation
             if (jeu.isAlive()) {
                 mettreLeJeuEnMarche(false);
             }
-            final JFrame fenetreVitesse = new JFrame();
-            fenetreVitesse.setTitle("Changement de vitesse d'actualisation");
-            fenetreVitesse.setResizable(false);
-            JPanel panneauVitesse = new JPanel();
-            fenetreVitesse.add(panneauVitesse);
-            panneauVitesse.setLayout(new BoxLayout(panneauVitesse, BoxLayout.Y_AXIS));
+            final JFrame fenetreOptions = new JFrame();
+            fenetreOptions.setTitle("Options");
+            fenetreOptions.setResizable(false);
+            JPanel panneauOptions = new JPanel();
+            panneauOptions.setLayout(new BoxLayout(panneauOptions, BoxLayout.Y_AXIS));
+            fenetreOptions.add(panneauOptions);
+            final JSlider sliderTaillePixels = new JSlider(0, 10, plateauDeJeu.getTaillePixels());
+            sliderTaillePixels.setPaintLabels(true);
+            sliderTaillePixels.setPaintTicks(true);
+            sliderTaillePixels.setPaintTrack(true);
+            sliderTaillePixels.setMajorTickSpacing(10);
+            sliderTaillePixels.setMinorTickSpacing(1);
+            sliderTaillePixels.setAlignmentX(Component.CENTER_ALIGNMENT);
+            final JLabel sliderTaillePixelsLabel = new JLabel("Taille des pixels : " + sliderTaillePixels.getValue());
+            sliderTaillePixelsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             final JSlider sliderVitesse = new JSlider(0, 500, plateauDeJeu.getVitesseActualisation());
             sliderVitesse.setPaintLabels(true);
             sliderVitesse.setPaintTicks(true);
             sliderVitesse.setPaintTrack(true);
             sliderVitesse.setMajorTickSpacing(100);
             sliderVitesse.setMinorTickSpacing(50);
-            final JLabel sliderLabel = new JLabel("Vitesse : " + sliderVitesse.getValue() + " ms");
-            final JButton changerVitesse = new JButton("Changer la vitesse");
-            panneauVitesse.add(sliderVitesse);
-            panneauVitesse.add(sliderLabel);
-            panneauVitesse.add(changerVitesse);
-            panneauVitesse.setBorder(BorderFactory.createLineBorder(panneauVitesse.getBackground(), 10));
+            sliderVitesse.setAlignmentX(Component.CENTER_ALIGNMENT);
+            final JLabel sliderVitesseLabel = new JLabel("Vitesse : " + sliderVitesse.getValue() + " ms");
+            sliderVitesseLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            final JButton changerOptions = new JButton("Sauvegarder");
+            changerOptions.setAlignmentX(Component.CENTER_ALIGNMENT);
+            panneauOptions.add(sliderTaillePixelsLabel);
+            panneauOptions.add(Box.createRigidArea(new Dimension(0, 3)));
+            panneauOptions.add(sliderTaillePixels);
+            panneauOptions.add(Box.createRigidArea(new Dimension(0, 10)));
+            panneauOptions.add(sliderVitesseLabel);
+            panneauOptions.add(Box.createRigidArea(new Dimension(0, 3)));
+            panneauOptions.add(sliderVitesse);
+            panneauOptions.add(Box.createRigidArea(new Dimension(0, 10)));
+            panneauOptions.add(changerOptions);
+            panneauOptions.setBorder(BorderFactory.createLineBorder(panneauOptions.getBackground(), 10));
+
+            sliderTaillePixels.addChangeListener(new ChangeListener() {
+
+                @Override
+                public void stateChanged(ChangeEvent e) {
+
+                    if (sliderTaillePixels.getValue() < 1) {
+                        sliderTaillePixels.setValue(1);
+                    }
+                    sliderTaillePixelsLabel.setText("Taille des pixels : " + sliderTaillePixels.getValue());
+
+                }
+
+            });
 
             sliderVitesse.addChangeListener(new ChangeListener() {
 
                 @Override
                 public void stateChanged(ChangeEvent e) {
 
-                    if(sliderVitesse.getValue() < 10){
+                    if (sliderVitesse.getValue() < 10) {
                         sliderVitesse.setValue(10);
                     }
-                    sliderLabel.setText("Vitesse : " + sliderVitesse.getValue() + " ms");
+                    sliderVitesseLabel.setText("Vitesse : " + sliderVitesse.getValue() + " ms");
 
                 }
 
             });
 
-            changerVitesse.addActionListener(new ActionListener() {
+            changerOptions.addActionListener(new ActionListener() {
 
                 @Override
                 public void actionPerformed(ActionEvent evenement) {
 
+                    plateauDeJeu.setTaillePixels(sliderTaillePixels.getValue());
                     plateauDeJeu.setVitesseActualisation(sliderVitesse.getValue());
+                    setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+                    pack();
                     mettreLeJeuEnMarche(true);
-                    fenetreVitesse.dispose();
+                    fenetreOptions.dispose();
 
                 }
 
             });
 
-            fenetreVitesse.pack();
-            fenetreVitesse.setLocationRelativeTo(null);
-            fenetreVitesse.setVisible(true);
+            fenetreOptions.pack();
+            fenetreOptions.setLocationRelativeTo(null);
+            fenetreOptions.setVisible(true);
 
         } else if (evenement.getSource().equals(menuFichierQuitter)) {
 
@@ -259,8 +341,8 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
             // À propos du projet
             JOptionPane.showMessageDialog(null,
                     """
-                            Ce jeu est inspiré du célèbre jeu "Game of Life" de John Conway.                        \s
-                            Ce projet est une création personnelle dans le but de découvrir l'environnement Java.   \s
+                            Ce jeu est inspiré du célèbre jeu "Game of Life" de John Conway.
+                            Ce projet est une création personnelle dans le but de découvrir l'environnement Java.
                             N'hésitez pas à me retrouver sur GitHub à l'adresse suivante : https://github.com/Velki0"""
             );
 
