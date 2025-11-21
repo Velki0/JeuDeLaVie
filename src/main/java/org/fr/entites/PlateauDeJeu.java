@@ -16,8 +16,8 @@ public class PlateauDeJeu extends JPanel implements Runnable {
 
     protected PlateauDeJeu() {
 
-        this.automate = new Automate(100, 100, false);
-        this.grille = new boolean[100][100];
+        this.automate = new Automate(80, 80, false);
+        this.grille = new boolean[80][80];
         generation = 0;
         taillePixels = 5;
         initialiserGrille();
@@ -59,6 +59,7 @@ public class PlateauDeJeu extends JPanel implements Runnable {
         grille = new boolean[lignesTotales][colonnesTotales];
         automate = new Automate(lignesTotales, colonnesTotales, false);
         generation = 0;
+        revalidate();
         initialiserGrille();
 
     }
@@ -69,6 +70,7 @@ public class PlateauDeJeu extends JPanel implements Runnable {
         this.automate = new Automate(new Modele(chemin).getModeleNormaliser());
         this.grille = new boolean[automate.getLignesTotales()][automate.getColonnesTotales()];
         generation = 0;
+        revalidate();
         initialiserGrille();
 
     }
@@ -88,6 +90,7 @@ public class PlateauDeJeu extends JPanel implements Runnable {
     protected void setTaillePixels(int taillePixels) {
 
         this.taillePixels = taillePixels;
+        revalidate();
         repaint();
 
     }
@@ -122,7 +125,6 @@ public class PlateauDeJeu extends JPanel implements Runnable {
     public void run() {
 
         mettreAJourGrille();
-        repaint();
         try {
             Thread.sleep(vitesseActualisation);
             run();

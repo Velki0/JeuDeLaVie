@@ -19,7 +19,6 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
     private final JMenuItem menuFichierNouvelleGrille, menuFichierOuvrir, menuFichierOptions, menuFichierQuitter;
     private final JMenuItem menuJeuAutoRemplissage, menuJeuStart, menuJeuStop, menuJeuReset;
     private final JMenuItem menuAideSource, menuAideAPropos;
-    private final JPanel affichageGeneration = new JPanel();
     private static final JLabel generationLabel = new JLabel("Génération : ");
     private final PlateauDeJeu plateauDeJeu;
     private Thread jeu;
@@ -69,10 +68,23 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
 
         // Initialisation du plateau de jeu
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        affichageGeneration.add(generationLabel);
-        add(affichageGeneration, BorderLayout.NORTH);
+        JPanel panneauCentral = new JPanel(new GridBagLayout());
+        GridBagConstraints contraintes = new GridBagConstraints();
+        contraintes.fill = GridBagConstraints.VERTICAL;
+
+        // Ajout du panneau pour afficher le numéro de génération
+        contraintes.gridx = 0;
+        contraintes.gridy = 0;
+        panneauCentral.add(generationLabel, contraintes);
+
+        // Ajout du plateau de cellules
         plateauDeJeu = new PlateauDeJeu();
-        add(plateauDeJeu, BorderLayout.SOUTH);
+        contraintes.gridy = 1;
+        panneauCentral.add(plateauDeJeu, contraintes);
+        panneauCentral.setAlignmentX(Component.CENTER_ALIGNMENT);
+        add(panneauCentral);
+
+        // Fin de l'initialisation
         pack();
         jeu = new Thread(plateauDeJeu);
 
@@ -167,7 +179,6 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
                 public void actionPerformed(ActionEvent evenement) {
 
                     plateauDeJeu.rearrangerGrille((int) spinnerNouvelleGrilleHauteur.getValue(), (int) spinnerNouvelleGrilleLargeur.getValue());
-                    setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
                     pack();
                     fenetreNouvelleGrille.dispose();
 
@@ -193,7 +204,6 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
             if (valeurRetourne == JFileChooser.APPROVE_OPTION) {
                 try {
                     plateauDeJeu.chargerModele(Paths.get(chooser.getSelectedFile().getPath()));
-                    setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
                     pack();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -219,7 +229,7 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
             sliderTaillePixels.setMajorTickSpacing(10);
             sliderTaillePixels.setMinorTickSpacing(1);
             sliderTaillePixels.setAlignmentX(Component.CENTER_ALIGNMENT);
-            final JLabel sliderTaillePixelsLabel = new JLabel("Taille des pixels : " + sliderTaillePixels.getValue());
+            final JLabel sliderTaillePixelsLabel = new JLabel("Taille des cellules : " + sliderTaillePixels.getValue());
             sliderTaillePixelsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             final JSlider sliderVitesse = new JSlider(0, 500, plateauDeJeu.getVitesseActualisation());
             sliderVitesse.setPaintLabels(true);
@@ -251,7 +261,7 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
                     if (sliderTaillePixels.getValue() < 1) {
                         sliderTaillePixels.setValue(1);
                     }
-                    sliderTaillePixelsLabel.setText("Taille des pixels : " + sliderTaillePixels.getValue());
+                    sliderTaillePixelsLabel.setText("Taille des cellules : " + sliderTaillePixels.getValue());
 
                 }
 
@@ -278,7 +288,6 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
 
                     plateauDeJeu.setTaillePixels(sliderTaillePixels.getValue());
                     plateauDeJeu.setVitesseActualisation(sliderVitesse.getValue());
-                    setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
                     pack();
                     mettreLeJeuEnMarche(true);
                     fenetreOptions.dispose();
