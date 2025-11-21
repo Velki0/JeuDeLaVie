@@ -9,7 +9,7 @@ public class Automate {
     private final int colonnesTotales;
     private final List<List<Cellule>> cellules;
 
-    public Automate(int lignesTotales, int colonnesTotales) {
+    protected Automate(int lignesTotales, int colonnesTotales) {
 
         this.lignesTotales = lignesTotales;
         this.colonnesTotales = colonnesTotales;
@@ -23,7 +23,21 @@ public class Automate {
 
     }
 
-    public Automate(List<List<Boolean>> modele) {
+    protected Automate(int lignesTotales, int colonnesTotales, boolean etatInitial) {
+
+        this.lignesTotales = lignesTotales;
+        this.colonnesTotales = colonnesTotales;
+        cellules = new ArrayList<>();
+        for (int x = 0; x < lignesTotales; x++) {
+            cellules.add(new ArrayList<>());
+            for (int y = 0; y < colonnesTotales; y++) {
+                cellules.get(x).add(new Cellule(etatInitial));
+            }
+        }
+
+    }
+
+    protected Automate(List<List<Boolean>> modele) {
 
         this.lignesTotales = modele.size();
         this.colonnesTotales = modele.getFirst().size();

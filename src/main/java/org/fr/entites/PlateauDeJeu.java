@@ -5,8 +5,6 @@ import java.awt.*;
 import java.beans.Transient;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
 
 public class PlateauDeJeu extends JPanel implements Runnable {
 
@@ -16,14 +14,13 @@ public class PlateauDeJeu extends JPanel implements Runnable {
     private final JLabel generationLabel;
     private int vitesseActualisation;
 
-    public PlateauDeJeu() throws IOException {
+    protected PlateauDeJeu() {
 
-        Path chemin = Paths.get("src/main/resources/modeles/crystallizationanddecayoscillator.rle");
-        this.automate = new Automate(new Modele(chemin).getModeleNormaliser());
-        this.grille = new boolean[automate.getLignesTotales()][automate.getColonnesTotales()];
-        initialiserGrille();
+        this.automate = new Automate(50, 50, false);
+        this.grille = new boolean[50][50];
         generation = 0;
-        generationLabel = new JLabel("Génération : " + generation);
+        generationLabel = new JLabel();
+        initialiserGrille();
         add(generationLabel);
         vitesseActualisation = 50;
 
@@ -36,6 +33,16 @@ public class PlateauDeJeu extends JPanel implements Runnable {
                 grille[x][y] = automate.getCellules().get(x).get(y).getEnVie() ;
             }
         }
+        generationLabel.setText("Génération : " + generation);
+        repaint();
+
+    }
+
+    protected void reinitialiserGrille() {
+
+        automate.reinitialiserAutomate();
+        generation = 0;
+        initialiserGrille();
 
     }
 
@@ -48,36 +55,35 @@ public class PlateauDeJeu extends JPanel implements Runnable {
 
     }
 
-    public void reinitialiserGrille() {
+    protected void rearrangerGrille(int lignesTotales, int colonnesTotales) {
 
-        automate.reinitialiserAutomate();
-        for (boolean[] ligne : grille) {
-            Arrays.fill(ligne, false);
-        }
+        grille = new boolean[lignesTotales][colonnesTotales];
+        automate = new Automate(lignesTotales, colonnesTotales, false);
         generation = 0;
-        generationLabel.setText("Génération : " + generation);
+        initialiserGrille();
 
     }
 
-    public void autoRemplissageGrille() {
+    protected void chargerModele(Path chemin) throws IOException {
+
+        reinitialiserGrille();
+        this.automate = new Automate(new Modele(chemin).getModeleNormaliser());
+        this.grille = new boolean[automate.getLignesTotales()][automate.getColonnesTotales()];
+        generation = 0;
+        initialiserGrille();
+
+    }
+
+    protected void autoRemplissage() {
 
         automate = new Automate(grille.length, grille[0].length);
-        initialiserGrille();
         generation = 0;
-        repaint();
-        generationLabel.setText("Génération : " + generation);
+        initialiserGrille();
 
     }
 
-    public void rearrangerGrille(int lignesTotales, int colonnesTotales) {
-
-        this.grille = new boolean[lignesTotales][colonnesTotales];
-        autoRemplissageGrille();
-
-    }
-
-    public int getVitesseActualisation() { return vitesseActualisation; }
-    public void setVitesseActualisation(int vitesseActualisation) { this.vitesseActualisation = vitesseActualisation; }
+    protected int getVitesseActualisation() { return vitesseActualisation; }
+    protected void setVitesseActualisation(int vitesseActualisation) { this.vitesseActualisation = vitesseActualisation; }
 
     @Override
     @Transient

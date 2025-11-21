@@ -15,7 +15,7 @@ public class Modele {
     private final List<String> modeleEncode;
     private List<List<Boolean>> modeleNormalise;
 
-    public Modele(Path chemin) throws IOException {
+    protected Modele(Path chemin) throws IOException {
 
         modeleEncode = Files.readAllLines(chemin, StandardCharsets.UTF_8);
         modeleEncode.removeIf(ligne -> ligne.charAt(0) == '#');
@@ -92,7 +92,7 @@ public class Modele {
                 }
             }
         }
-        // Complète par des cases mortes les lignes non complètes
+        // Complète par des cases mortes les colonnes et lignes non complètes ou précisées dans le fichier source
         for (int index = 0; index < lignesModeleDecode.size(); index++) {
             if (lignesModeleDecode.get(index).length() < colonnesTotales) {
                 lignesModeleDecode.set(index, (lignesModeleDecode.get(index) + String.join("", Collections.nCopies((colonnesTotales - lignesModeleDecode.get(index).length()), "b"))));

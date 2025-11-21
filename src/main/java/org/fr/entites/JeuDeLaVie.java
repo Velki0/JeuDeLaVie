@@ -3,24 +3,27 @@ package org.fr.entites;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class JeuDeLaVie extends JFrame implements ActionListener {
 
     // Menu du jeu
     private final JMenuBar barreDeMenu;
     private final JMenu menuFichier, menuJeu, menuAide;
-    private final JMenuItem menuFichierNouvelleGrille, menuFichierOptions, menuFichierQuitter;
+    private final JMenuItem menuFichierNouvelleGrille, menuFichierOuvrir, menuFichierOptions, menuFichierQuitter;
     private final JMenuItem menuJeuAutoRemplissage, menuJeuStart, menuJeuStop, menuJeuReset;
     private final JMenuItem  menuAideSource, menuAideAPropos;
     private final PlateauDeJeu plateauDeJeu;
     private Thread jeu;
 
-    public JeuDeLaVie() throws IOException {
+    public JeuDeLaVie() {
 
         // Initialisation du menu
         barreDeMenu = new JMenuBar();
@@ -28,6 +31,7 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
         menuJeu = new JMenu("Jeu");
         menuAide = new JMenu("Aide");
         menuFichierNouvelleGrille = new JMenuItem("Nouvelle Grille");
+        menuFichierOuvrir = new JMenuItem("Ouvrir ...");
         menuFichierOptions = new JMenuItem("Options");
         menuFichierQuitter = new JMenuItem("Quitter");
         menuJeuAutoRemplissage = new JMenuItem("Auto remplissage");
@@ -41,6 +45,7 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
         barreDeMenu.add(menuJeu);
         barreDeMenu.add(menuAide);
         menuFichier.add(menuFichierNouvelleGrille);
+        menuFichier.add(menuFichierOuvrir);
         menuFichier.add(menuFichierOptions);
         menuFichier.add(menuFichierQuitter);
         menuJeu.add(menuJeuAutoRemplissage);
@@ -50,6 +55,7 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
         menuAide.add(menuAideSource);
         menuAide.add(menuAideAPropos);
         menuFichierNouvelleGrille.addActionListener(this);
+        menuFichierOuvrir.addActionListener(this);
         menuFichierOptions.addActionListener(this);
         menuFichierQuitter.addActionListener(this);
         menuJeuAutoRemplissage.addActionListener(this);
@@ -94,23 +100,17 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
             }
             final JFrame fenetreNouvelleGrille = new JFrame();
             fenetreNouvelleGrille.setTitle("Nouvelle Grille");
-            fenetreNouvelleGrille.setSize(250, 170);
-            fenetreNouvelleGrille.setLocation(
-                    (Toolkit.getDefaultToolkit().getScreenSize().width - fenetreNouvelleGrille.getWidth()) / 2,
-                    (Toolkit.getDefaultToolkit().getScreenSize().height - fenetreNouvelleGrille.getHeight()) / 2
-            );
             fenetreNouvelleGrille.setResizable(false);
             JPanel panneauNouvelleGrille = new JPanel();
             fenetreNouvelleGrille.add(panneauNouvelleGrille);
             panneauNouvelleGrille.setLayout(new BoxLayout(panneauNouvelleGrille, BoxLayout.Y_AXIS));
             final JSpinner spinnerNouvelleGrilleHauteur = new JSpinner(new SpinnerNumberModel(20, 20, 120, 1));
-            spinnerNouvelleGrilleHauteur.setSize(new Dimension(30, 20));
-            final JSpinner spinnerNouvelleGrilleLargeur = new JSpinner(new SpinnerNumberModel(20, 20, 150, 1));
+            final JSpinner spinnerNouvelleGrilleLargeur = new JSpinner(new SpinnerNumberModel(20, 20, 120, 1));
             final JButton creerNouvelleGrille = new JButton("Créer la nouvelle Grille");
             panneauNouvelleGrille.add(new JLabel("Option de la nouvelle Grille", SwingConstants.CENTER));
             panneauNouvelleGrille.add(new JLabel("Nombre le lignes (120max) : ", SwingConstants.CENTER));
             panneauNouvelleGrille.add(spinnerNouvelleGrilleHauteur);
-            panneauNouvelleGrille.add(new JLabel("Nombre le colonnes (150max) : ", SwingConstants.CENTER));
+            panneauNouvelleGrille.add(new JLabel("Nombre le colonnes (120max) : ", SwingConstants.CENTER));
             panneauNouvelleGrille.add(spinnerNouvelleGrilleLargeur);
             panneauNouvelleGrille.add(creerNouvelleGrille);
             panneauNouvelleGrille.setBorder(BorderFactory.createLineBorder(panneauNouvelleGrille.getBackground(), 10));
@@ -127,7 +127,31 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
                 }
 
             });
+
+            fenetreNouvelleGrille.pack();
+            fenetreNouvelleGrille.setLocationRelativeTo(null);
             fenetreNouvelleGrille.setVisible(true);
+
+        } else if (evenement.getSource().equals(menuFichierOuvrir)) {
+
+            // Permettre l'ouverture d'un modèle prédéfini sous le format .rle ou .txt
+            if (jeu.isAlive()) {
+                mettreLeJeuEnMarche(false);
+            }
+            JFileChooser chooser = new JFileChooser(System.getProperty("user.home") + "/Desktop");
+            FileNameExtensionFilter filtre = new FileNameExtensionFilter("Fichiers .RLE et .TXT", "rle", "txt");
+            chooser.setDialogTitle("Choisissez un modèle : ");
+            chooser.setFileFilter(filtre);
+            int valeurRetourne = chooser.showOpenDialog(null);
+            if(valeurRetourne == JFileChooser.APPROVE_OPTION) {
+                Path chemin = Paths.get(chooser.getSelectedFile().getPath());
+                try {
+                    plateauDeJeu.chargerModele(chemin);
+                    pack();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
 
         } else if (evenement.getSource().equals(menuFichierOptions)){
 
@@ -137,11 +161,6 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
             }
             final JFrame fenetreVitesse = new JFrame();
             fenetreVitesse.setTitle("Changement de vitesse d'actualisation");
-            fenetreVitesse.setSize(400, 150);
-            fenetreVitesse.setLocation(
-                    (Toolkit.getDefaultToolkit().getScreenSize().width - fenetreVitesse.getWidth()) / 2,
-                    (Toolkit.getDefaultToolkit().getScreenSize().height - fenetreVitesse.getHeight()) / 2
-            );
             fenetreVitesse.setResizable(false);
             JPanel panneauVitesse = new JPanel();
             fenetreVitesse.add(panneauVitesse);
@@ -185,6 +204,9 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
                 }
 
             });
+
+            fenetreVitesse.pack();
+            fenetreVitesse.setLocationRelativeTo(null);
             fenetreVitesse.setVisible(true);
 
         } else if (evenement.getSource().equals(menuFichierQuitter)) {
@@ -198,7 +220,7 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
             if (jeu.isAlive()) {
                 mettreLeJeuEnMarche(false);
             }
-            plateauDeJeu.autoRemplissageGrille();
+            plateauDeJeu.autoRemplissage();
 
         } else if (evenement.getSource().equals(menuJeuStart)) {
 
