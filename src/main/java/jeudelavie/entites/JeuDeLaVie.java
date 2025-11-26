@@ -1,4 +1,4 @@
-package org.fr.entites;
+package jeudelavie.entites;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -272,8 +272,8 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
                 @Override
                 public void stateChanged(ChangeEvent e) {
 
-                    if (sliderVitesse.getValue() < 10) {
-                        sliderVitesse.setValue(10);
+                    if (sliderVitesse.getValue() < 5) {
+                        sliderVitesse.setValue(5);
                     }
                     sliderVitesseLabel.setText("Vitesse : " + sliderVitesse.getValue() + " ms");
 

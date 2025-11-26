@@ -1,4 +1,4 @@
-package org.fr.entites;
+package jeudelavie.entites;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

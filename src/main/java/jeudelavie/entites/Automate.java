@@ -1,4 +1,4 @@
-package org.fr.entites;
+package jeudelavie.entites;
 
 import java.util.ArrayList;
 import java.util.List;

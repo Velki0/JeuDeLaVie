@@ -1,4 +1,4 @@
-package org.fr.entites;
+package jeudelavie.entites;
 
 public class Cellule {
 

@@ -1,4 +1,4 @@
-package org.fr.entites;
+package jeudelavie.entites;
 
 import javax.swing.*;
 import java.awt.*;
@@ -128,7 +128,7 @@ public class PlateauDeJeu extends JPanel implements Runnable {
         try {
             Thread.sleep(vitesseActualisation);
             run();
-        } catch (InterruptedException _) {}
+        } catch (InterruptedException ignored) {}
 
     }
 }

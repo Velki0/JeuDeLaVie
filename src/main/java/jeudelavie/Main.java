@@ -1,13 +1,12 @@
-package org.fr;
+package jeudelavie;
 
-import org.fr.entites.JeuDeLaVie;
+import jeudelavie.entites.JeuDeLaVie;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class Main {
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
 
         JFrame jeuDeLaVie = new JeuDeLaVie();
         jeuDeLaVie.setTitle("Jeu de la Vie de Conway");
