@@ -1,6 +1,6 @@
-package jeudelavie;
+package fr.baptistegerardin.jeudelavie;
 
-import jeudelavie.entites.JeuDeLaVie;
+import fr.baptistegerardin.jeudelavie.entites.JeuDeLaVie;
 
 import javax.swing.*;
 

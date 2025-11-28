@@ -1,4 +1,6 @@
-package jeudelavie.entites;
+package fr.baptistegerardin.jeudelavie.entites;
+
+import fr.baptistegerardin.jeudelavie.assertion.ModeleRenseigneNonConforme;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -206,7 +208,10 @@ public class JeuDeLaVie extends JFrame implements ActionListener {
                     plateauDeJeu.chargerModele(Paths.get(chooser.getSelectedFile().getPath()));
                     pack();
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    JOptionPane.showMessageDialog(null, "Le fichier renseigné est introuvable");
+                } catch (ModeleRenseigneNonConforme e) {
+                    System.err.println(e.getMessage());
+                    JOptionPane.showMessageDialog(null, "Le modèle renseigné est non-conforme, veuillez choisir un fichier .rle ou .txt avec le bon formatage de données\n" + e.getMessage());
                 }
             }
 

@@ -1,4 +1,6 @@
-package jeudelavie.entites;
+package fr.baptistegerardin.jeudelavie.entites;
+
+import fr.baptistegerardin.jeudelavie.assertion.ModeleRenseigneNonConforme;
 
 import javax.swing.*;
 import java.awt.*;
@@ -64,7 +66,7 @@ public class PlateauDeJeu extends JPanel implements Runnable {
 
     }
 
-    protected void chargerModele(Path chemin) throws IOException {
+    protected void chargerModele(Path chemin) throws IOException, ModeleRenseigneNonConforme {
 
         reinitialiserGrille();
         this.automate = new Automate(new Modele(chemin).getModeleNormaliser());

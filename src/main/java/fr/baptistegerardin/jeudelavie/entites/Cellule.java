@@ -1,4 +1,4 @@
-package jeudelavie.entites;
+package fr.baptistegerardin.jeudelavie.entites;
 
 public class Cellule {
 

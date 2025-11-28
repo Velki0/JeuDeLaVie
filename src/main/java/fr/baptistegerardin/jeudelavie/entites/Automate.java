@@ -1,4 +1,4 @@
-package jeudelavie.entites;
+package fr.baptistegerardin.jeudelavie.entites;
 
 import java.util.ArrayList;
 import java.util.List;
