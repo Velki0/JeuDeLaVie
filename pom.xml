@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fr.baptistegerardin</groupId>
-    <artifactId>jeu-de-la-vie-conway</artifactId>
+    <artifactId>jeu-de-la-vie</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <name>Jeu de la Vie de Conway</name>
