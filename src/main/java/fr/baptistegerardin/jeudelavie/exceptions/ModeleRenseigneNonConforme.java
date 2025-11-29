@@ -1,4 +1,4 @@
-package fr.baptistegerardin.jeudelavie.assertion;
+package fr.baptistegerardin.jeudelavie.exceptions;
 
 public class ModeleRenseigneNonConforme extends Exception {
 

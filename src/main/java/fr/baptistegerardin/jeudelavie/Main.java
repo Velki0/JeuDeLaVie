@@ -2,7 +2,7 @@ package fr.baptistegerardin.jeudelavie;
 
 import fr.baptistegerardin.jeudelavie.entites.JeuDeLaVie;
 
-import javax.swing.*;
+import javax.swing.JFrame;
 
 public class Main {
 

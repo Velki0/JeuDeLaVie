@@ -37,16 +37,16 @@ public class Automate {
 
     }
 
-    protected Automate(List<List<Boolean>> modele) {
+    protected Automate(Modele modele) {
 
-        this.lignesTotales = modele.size();
-        this.colonnesTotales = modele.getFirst().size();
+        this.lignesTotales = modele.getLignesTotales();
+        this.colonnesTotales = modele.getColonnesTotales();
         cellules = new ArrayList<>();
         List<Cellule> ligneCellules;
         for (int x = 0; x < lignesTotales; x++) {
             ligneCellules = new ArrayList<>();
             for (int y = 0; y < colonnesTotales; y++) {
-                ligneCellules.add(new Cellule(modele.get(x).get(y)));
+                ligneCellules.add(new Cellule(modele.getModeleNormaliser().get(x).get(y)));
             }
             cellules.add(ligneCellules);
         }
