@@ -4,6 +4,9 @@ import fr.baptistegerardin.jeudelavie.entites.JeuDeLaVie;
 
 import javax.swing.JFrame;
 
+/**
+ * Démarrage de l'application du Jeu de la Vie.
+ */
 public class Main {
 
     public static void main(String[] args) {

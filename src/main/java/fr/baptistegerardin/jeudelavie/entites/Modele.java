@@ -13,7 +13,8 @@ import java.util.List;
 /**
  * La classe Modele est un modèle d'automate cellulaire qui peut être chargé grâce à une ressource extérieure.
  * Il est constitué de trois paramètres, son nombre de lignes, son nombre de colonnes et un tableau de booléens stipulant l'état zéro de l'automate.
- * Les sites communautaires comme https://conwaylife.com/wiki/ ou https://conwaylife.appspot.com/library/ proposent un grand nombre de modèles disponibles généralement au format .rle.
+ * Les sites communautaires comme : <a href="https://conwaylife.com/wiki/">Le wiki de conwaylife.com</a>
+ * ou <a href="https://conwaylife.appspot.com/library/">conwaylife.appspot</a> proposent un grand nombre de modèles disponibles généralement au format .rle.
  * Ces modèles téléchargés peuvent être ouverts grâce à cette application.
  * Ils doivent cependant respecter un certain formatage comme ci-dessous :
  * Plusieurs commentaires optionnels repérés par un '#' en début de ligne.
@@ -27,11 +28,11 @@ import java.util.List;
  */
 public class Modele {
 
-    /** Le nombre total de lignes du modèle */
+    /** Le nombre total de lignes du modèle. */
     private final int lignesTotales;
-    /** Le nombre total de colonnes du modèle */
+    /** Le nombre total de colonnes du modèle. */
     private final int colonnesTotales;
-    /** Un tableau de booléens contenant l'information du point de départ du modèle normalisé et lisible par le programme */
+    /** Un tableau de booléens contenant l'information du point de départ du modèle normalisé et lisible par le programme. */
     private final List<List<Boolean>> modeleNormalise;
 
     /**
@@ -47,7 +48,7 @@ public class Modele {
         List<String> modeleEncode = Files.readAllLines(chemin, StandardCharsets.UTF_8);
         modeleEncode.removeIf(ligne -> ligne.charAt(0) == '#');
 
-        // Quelques tests sont réalisé pour s'assurer que le fichier renseigné contient bien des informations sur la taille du modèle.
+        // Quelques tests sont réalisés pour s'assurer que le fichier renseigné contient bien des informations sur la taille du modèle.
         // Les attributs lignesTotales et colonnesTotales sont initialisés.
         if (!(modeleEncode.getFirst().matches(".*(x = ).*") && modeleEncode.getFirst().matches(".*(, y = ).*"))) {
             throw new ModeleRenseigneNonConforme("Le fichier ne renseigne pas ou renseigne mal son nombre de lignes et de colonnes");
@@ -165,30 +166,18 @@ public class Modele {
      * Getter permettant de récupérer le nombre de lignes du modèle renseigné par le fichier source.
      * @return Le nombre total de lignes du modèle.
      */
-    protected int getLignesTotales() {
-
-        return lignesTotales;
-
-    }
+    protected int getLignesTotales() { return lignesTotales; }
 
     /**
      * Getter permettant de récupérer le nombre de colonnes du modèle renseigné par le fichier source.
      * @return Le nombre total de colonnes du modèle.
      */
-    protected int getColonnesTotales() {
-
-        return colonnesTotales;
-
-    }
+    protected int getColonnesTotales() { return colonnesTotales; }
 
     /**
      * Getter permettant de récupérer le modèle lisible par l'application.
      * @return Le modèle de l'automate cellulaire sous la forme d'un tableau de booléens.
      */
-    protected List<List<Boolean>> getModeleNormaliser() {
-
-        return modeleNormalise;
-
-    }
+    protected List<List<Boolean>> getModeleNormaliser() { return modeleNormalise; }
 
 }

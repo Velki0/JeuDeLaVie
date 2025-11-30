@@ -6,7 +6,7 @@
 
     <groupId>fr.baptistegerardin</groupId>
     <artifactId>jeu-de-la-vie</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 
     <name>Jeu de la Vie de Conway</name>
     <description>Projet personnel pour la création d'un jeu de la vie de Conway</description>
@@ -36,7 +36,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.5.0</version>
                 <configuration>
-                    <outputDirectory>${user.home}/Desktop/JeuDeLaVie/executable</outputDirectory>
+                    <outputDirectory>executables</outputDirectory>
                     <archive>
                         <manifest>
                             <mainClass>fr.baptistegerardin.jeudelavie.Main</mainClass>
