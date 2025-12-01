@@ -1,6 +1,5 @@
 # JeuDeLaVie
-Projet personnel pour la création d'un jeu de la vie de Conway<br>
-Un premier jar éxécutable est disponible dans le dossier 'executables' du projet
+Projet personnel pour la création d'un jeu de la vie de Conway
 
 # Objectif 
 Faire le jeu le plus complet avec le plus de fonctionnalités possible

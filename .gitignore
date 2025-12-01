@@ -3,15 +3,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .kotlin
+executables
 
 ### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-*.iws
-*.iml
-*.ipr
+.idea/
 
 ### Eclipse ###
 .apt_generated
